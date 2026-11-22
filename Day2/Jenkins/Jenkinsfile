@@ -1,0 +1,42 @@
+
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/2 * * * *')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                echo 'GitHub source code downloaded'
+            }
+        }
+
+        stage('Validate HTML') {
+            steps {
+                sh '''
+                    test -f day2/index.html
+                    grep -q "MEVI TECHNOLOGIES" day2/index.html
+                '''
+                echo 'HTML validation successful'
+            }
+        }
+
+        stage('Build Success') {
+            steps {
+                echo 'MEVI HTML application build completed!'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI PIPELINE SUCCESS!'
+        }
+        failure {
+            echo 'CI PIPELINE FAILED!'
+        }
+    }
+}
