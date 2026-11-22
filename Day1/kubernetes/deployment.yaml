@@ -1,0 +1,27 @@
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mevi-website
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: mevi-website
+
+  template:
+    metadata:
+      labels:
+        app: mevi-website
+
+    spec:
+      containers:
+        - name: website
+          image: mevi-website:v1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 80
